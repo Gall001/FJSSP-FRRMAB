@@ -8,7 +8,7 @@ from operator import itemgetter
 from job import Job
 
 # Kacem 4 Jobs x 5 Machines
-file = 'datasets/Kacem1_4x5.fjs'
+file = 'Encoding/datasets/Kacem1_4x5.fjs'
 
 # Kacem 15 Jobs x 10 Machines
 #file = 'datasets/Kacem4.fjs'
@@ -62,10 +62,27 @@ with open(file) as data:
         # set next job to be processed
         currentJob += 1
 
-
+#print(jobs_list[0][1][0][0])
 print("List of ", len(jobs_list), " JOBs created")
 
 for j in range(len(jobs_list)):
     print("JOB [", j+1, "] has ", len(jobs_list[j]), " operations")
     for key in jobs_list[j]:
         print(key, ' -> ', jobs_list[j][key])
+
+#encoding
+OperationOrder = []
+for x in range(len(jobs_list)):
+    for y in jobs_list[x]:
+        OperationChosen = jobs_list[x][y][0]
+        OperationChosenValue = jobs_list[x][y][0][1]
+        for key in range(int(float(max_operations))):
+            #print("X: ",x,"y: ",y,"key: ",key," operation: ", jobs_list[x][y][key]," time: ",jobs_list[x][y][key][1])
+            if jobs_list[x][y][key][1] < OperationChosenValue: 
+                #print("I was switched from: ",OperationChosen," to: ",jobs_list[x][y][key])
+                OperationChosen = jobs_list[x][y][key]
+                OperationChosenValue = jobs_list[x][y][key][1]
+        OperationOrder.append(OperationChosen)
+
+print("Sequence of Operations (encoding):",OperationOrder)
+

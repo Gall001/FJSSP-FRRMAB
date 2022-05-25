@@ -35,7 +35,7 @@ from job import Job
 # Job 4 has 2 operations and follows the same logic
 
 # Kacem 4 Jobs x 5 Machines
-file = 'datasets/Kacem1_4x5.fjs'
+file = 'Encoding/datasets/Kacem1_4x5.fjs'
 
 # Kacem 15 Jobs x 10 Machines
 #file = 'datasets/Kacem4.fjs'
