@@ -1,6 +1,6 @@
 # FJSSP Datasets Reader to Dictionaries
 # Lupercio F Luppi 2022
-
+import random
 import re                           # Regular Expressions - to read dataset and parse
 from operator import itemgetter
 
@@ -69,20 +69,39 @@ for j in range(len(jobs_list)):
     print("JOB [", j+1, "] has ", len(jobs_list[j]), " operations")
     for key in jobs_list[j]:
         print(key, ' -> ', jobs_list[j][key])
+print("\n")
 
 #encoding
-OperationOrder = []
-for x in range(len(jobs_list)):
-    for y in jobs_list[x]:
-        OperationChosen = jobs_list[x][y][0]
-        OperationChosenValue = jobs_list[x][y][0][1]
-        for key in range(int(float(max_operations))):
-            #print("X: ",x,"y: ",y,"key: ",key," operation: ", jobs_list[x][y][key]," time: ",jobs_list[x][y][key][1])
-            if jobs_list[x][y][key][1] < OperationChosenValue: 
-                #print("I was switched from: ",OperationChosen," to: ",jobs_list[x][y][key])
-                OperationChosen = jobs_list[x][y][key]
-                OperationChosenValue = jobs_list[x][y][key][1]
-        OperationOrder.append(OperationChosen)
+SolutionNum = 5
+SolutionList = []
+for i in range(SolutionNum):
+    Solution = []
+    for x in range(len(jobs_list)):
+        for y in jobs_list[x]:
+            #choose option rendomly to append to a solution being made
+            OperationChosen = jobs_list[x][y][random.randint(0, int(float(max_operations))-1)]
+            Solution.append(OperationChosen)
+    SolutionList.append(Solution)
 
-print("Sequence of Operations (encoding):",OperationOrder)
+#print list os solutions
+print("Solution list:")
+for i in range(SolutionNum):
+    print("Solution #",i,": ",SolutionList[i])
+print("\n")
 
+
+#crossover
+s1 = SolutionList[random.randint(0, int(float(SolutionNum))-1)]
+s2 = SolutionList[random.randint(0, int(float(SolutionNum))-1)]
+Half = round(len(s1)/2)
+s1h1 = s1[:Half]
+s1h2 = s1[Half:]
+s2h1 = s2[:Half]
+s2h2 = s2[Half:]
+s2 = s1h1 + s2h2
+s1 = s2h1 + s1h2
+
+#print new solutions made with crossover
+print("New solutions made with crossover:")
+print("Solution 1: ",s1)
+print("Solution 2: ",s2)
