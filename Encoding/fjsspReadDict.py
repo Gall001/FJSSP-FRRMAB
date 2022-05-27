@@ -9,7 +9,7 @@ from job import Job
 
 # Kacem 4 Jobs x 5 Machines
 #file = 'Encoding/datasets/test.fjs'
-file = 'Encoding/datasets/Kacem1_4x5.fjs'
+file = './datasets/Kacem1_4x5.fjs'
 
 # Kacem 15 Jobs x 10 Machines
 #file = 'Encoding/datasets/Kacem4.fjs'
@@ -80,9 +80,9 @@ for i in range(SolutionNum):
         for y in jobs_list[x]:
             #choose option rendomly to append to a solution being made
             OperationChosen = jobs_list[x][y][random.randint(0, len(jobs_list[x][y])-1)]
-            Grade = len(jobs_list[x][y])
+            Grade = 1
             for key in range(len(jobs_list[x][y])):
-                if OperationChosen[1] > jobs_list[x][y][int(key)-1][1]: Grade = Grade -1
+                if OperationChosen[1] > jobs_list[x][y][int(key)-1][1]: Grade = Grade +1
             Solution.append(Grade)
     SolutionList.append(Solution)
 
@@ -130,3 +130,33 @@ for i in range(len(CrossoverList)):
 print("New solutions made with Mutation:")
 print("Solution 1: ",CrossoverList[0])
 print("Solution 2: ",CrossoverList[1])
+print("\n")
+
+#makespan Vector for each index on encoding
+#Duas listas, uma com tempo de job e outra com tempo da máquina, toda vez que for pega o tempo do job adiciona tempo da maquina rodando, depois de adicioonar pega
+#esse numero e adiciona na lista para falar o tempoo do job e o proxima operaçao tem que ser iniciado depois desse tempo
+
+#array that stores each machine and time for each operation on each job globally
+timeMachineOrganized = []
+for x in range(len(jobs_list)):
+    for y in jobs_list[x]:
+        timeMachineScrambled = []
+        # Clone the vector into another one so it can organize
+        for z in range(len(jobs_list[x][y])):
+            timeMachineScrambled.append(jobs_list[x][y][z])
+        timeMachineOrganizedTemp = sorted(timeMachineScrambled, key=lambda x: x[1])
+        timeMachineOrganized.append(timeMachineOrganizedTemp)
+solutionMachineTime = []
+
+#for each solution index number it search the number to add to solutionMachineTime
+for i in range(len(CrossoverList)):
+    timeMachineTemp = []
+    for x in range(len(CrossoverList[i])):
+        timeMachineTemp.append(timeMachineOrganized[x][CrossoverList[i][x] - 1])
+    solutionMachineTime.append(timeMachineTemp)
+
+# Print solution Machines and time after mutation
+print("solution Machines and time after Mutation:")
+print("Solution 1 machines and time: ", solutionMachineTime[0])
+print("Solution 2 machines and time: ", solutionMachineTime[1])
+
