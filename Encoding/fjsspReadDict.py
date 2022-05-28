@@ -9,7 +9,7 @@ from job import Job
 
 # Kacem 4 Jobs x 5 Machines
 #file = 'Encoding/datasets/test.fjs'
-file = './datasets/Kacem1_4x5.fjs'
+file = 'Encoding/datasets/Kacem1_4x5.fjs'
 
 # Kacem 15 Jobs x 10 Machines
 #file = 'Encoding/datasets/Kacem4.fjs'
