@@ -1,5 +1,6 @@
 # FJSSP Datasets Reader to Dictionaries
 # Lupercio F Luppi 2022
+from configparser import MissingSectionHeaderError
 import random
 import re                           # Regular Expressions - to read dataset and parse
 from operator import itemgetter
@@ -8,8 +9,8 @@ from operator import itemgetter
 from job import Job
 
 # Kacem 4 Jobs x 5 Machines
-#file = 'Encoding/datasets/test.fjs'
-file = 'Encoding/datasets/Kacem1_4x5.fjs'
+file = 'Encoding/datasets/test.fjs'
+#file = 'Encoding/datasets/Kacem1_4x5.fjs'
 
 # Kacem 15 Jobs x 10 Machines
 #file = 'Encoding/datasets/Kacem4.fjs'
@@ -159,4 +160,32 @@ for i in range(len(CrossoverList)):
 print("solution Machines and time after Mutation:")
 print("Solution 1 machines and time: ", solutionMachineTime[0])
 print("Solution 2 machines and time: ", solutionMachineTime[1])
+print("\n")
+
+
+# Caluclating Makespan
+for i in range(len(solutionMachineTime)):
+    jobs = []
+    machines = []
+    jobAtual = 0
+    contador = 0
+    for job in range(number_total_jobs):
+        jobs.append(0)
+    for machine in range(number_total_machines):
+        machines.append(0)
+    for solution in range(len(solutionMachineTime[i])):     
+        if(contador > len(jobs_list[jobAtual])-1): 
+            jobAtual += 1
+            contador = 0
+        contador += 1
+        print('job Atual: ',jobAtual)
+        #if(machines[solutionMachineTime[i][solution][0]-1] >= jobs[solutionMachineTime[i][jobAtual][0]-1]):
+            #machines[solutionMachineTime[i][solution][0]-1] += solutionMachineTime[i][solution][1]
+            #jobs[solutionMachineTime[i][jobAtual][0]-1] += machines[solutionMachineTime[i][solution][0]-1] + solutionMachineTime[i][solution][1]
+        #else:
+            #jobs[solutionMachineTime[i][jobAtual][0]-1] += solutionMachineTime[i][solution][1]
+            #machines[solutionMachineTime[i][solution][0]-1] += jobs[solutionMachineTime[i][jobAtual][0]-1] + solutionMachineTime[i][solution][1]
+    print("Machine finale: ",machines, "jobs finale: ",jobs, ' job atual: ', jobAtual)
+
+
 
