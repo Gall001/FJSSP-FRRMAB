@@ -9,8 +9,8 @@ from operator import itemgetter
 from job import Job
 
 # Kacem 4 Jobs x 5 Machines
-file = 'Encoding/datasets/test.fjs'
-#file = 'Encoding/datasets/Kacem1_4x5.fjs'
+#file = 'Encoding/datasets/test.fjs'
+file = 'Encoding/datasets/Kacem1_4x5.fjs'
 
 # Kacem 15 Jobs x 10 Machines
 #file = 'Encoding/datasets/Kacem4.fjs'
@@ -119,12 +119,9 @@ print("\n")
 
 #mutation
 for i in range(len(CrossoverList)):
-    #print("I: ",i)
     for x in range(len(jobs_list)):
         for y in jobs_list[x]:
-            #print("len(jobs_list[x][y]) : ", len(jobs_list[x][y])," jobs_list[x][i+1]: ",len(jobs_list[x][i+1]))
-            if len(jobs_list[x][y]) == len(jobs_list[x][i+1]): operatioNum = len(jobs_list[x][y]) 
-    #print(operatioNum)           
+            if len(jobs_list[x][y]) == len(jobs_list[x][i+1]): operatioNum = len(jobs_list[x][y])           
     CrossoverList[i][random.randint(0, len(CrossoverList[i])-1)] = random.randint(1, operatioNum)
 
 #Print new solutions after mutation
@@ -178,14 +175,12 @@ for i in range(len(solutionMachineTime)):
             jobAtual += 1
             contador = 0
         contador += 1
-        print('job Atual: ',jobAtual)
-        #if(machines[solutionMachineTime[i][solution][0]-1] >= jobs[solutionMachineTime[i][jobAtual][0]-1]):
-            #machines[solutionMachineTime[i][solution][0]-1] += solutionMachineTime[i][solution][1]
-            #jobs[solutionMachineTime[i][jobAtual][0]-1] += machines[solutionMachineTime[i][solution][0]-1] + solutionMachineTime[i][solution][1]
-        #else:
-            #jobs[solutionMachineTime[i][jobAtual][0]-1] += solutionMachineTime[i][solution][1]
-            #machines[solutionMachineTime[i][solution][0]-1] += jobs[solutionMachineTime[i][jobAtual][0]-1] + solutionMachineTime[i][solution][1]
-    print("Machine finale: ",machines, "jobs finale: ",jobs, ' job atual: ', jobAtual)
-
-
+        if(machines[solutionMachineTime[i][solution][0]-1] >= jobs[jobAtual]):
+            machines[solutionMachineTime[i][solution][0]-1] += solutionMachineTime[i][solution][1]
+            jobs[jobAtual] = machines[solutionMachineTime[i][solution][0]-1]
+        else:
+            jobs[jobAtual] += solutionMachineTime[i][solution][1] 
+            machines[solutionMachineTime[i][solution][0]-1] = jobs[jobAtual]
+    print('Solution ',solutionMachineTime[i],' makespans: ',max(machines))
+    print('\n')
 
