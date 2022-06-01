@@ -95,7 +95,7 @@ print("\n")
 
 
 #crossover
-ParsCrossover = 1
+ParsCrossover = 1 #bug nao aceita mais de um par!!!
 CrossoverList = []
 for i in range(ParsCrossover):
     #getting two rendom solutions, cutting them in half and mixing them one with another
