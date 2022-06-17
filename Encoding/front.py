@@ -76,11 +76,14 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
             currentJob += 1
 
     print("List of ", len(jobs_list), " JOBs created")
+    st.write("List of ", len(jobs_list), " jobs created")
 
     for j in range(len(jobs_list)):
         print("JOB [", j+1, "] has ", len(jobs_list[j]), " operations")
+        st.write("Job ", j+1, " has ", len(jobs_list[j]), " operations")
         for key in jobs_list[j]:
             print(key, ' -> ', jobs_list[j][key])
+            st.write(key, ' -> ', jobs_list[j][key])
     print("\n")
 
     #encoding
@@ -144,6 +147,7 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
     for i in range(SolutionNum):
         print("Solution #",i,": ",SolutionList[i])
     print("\n")
+    st.write("Exemple of solution: ", SolutionList[0])
 
     for i in range(generationNumber):
         #crossover
@@ -171,19 +175,24 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
                     print("Solution ",i,": ",CrossoverList[i])
                 print("\n")
 
-        if(random.random() <= mutationChance and validator == 1):
-            #mutation
-            for i in range(len(CrossoverList)):
-                for x in range(len(jobs_list)):
-                    for y in jobs_list[x]:
-                        operatioNum = len(jobs_list[x][y])       
-                CrossoverList[i][random.randint(0, len(CrossoverList[i])-1)] = random.randint(1, operatioNum)
+            if(random.random() <= mutationChance and validator == 1):
+                #mutation
+                for i in range(len(CrossoverList)):
+                    for x in range(len(jobs_list)):
+                        for y in jobs_list[x]:
+                            operatioNum = len(jobs_list[x][y])       
+                    CrossoverList[i][random.randint(0, len(CrossoverList[i])-1)] = random.randint(1, operatioNum)
 
-            #Print new solutions after mutation
-            print("New solutions made with Mutation:")
+                #Print new solutions after mutation
+                print("New solutions made with Mutation:")
+                for i in range(len(CrossoverList)):
+                    print("Solution ",i,": ",CrossoverList[i])
+                print("\n")
+
+            #inserting new solution in list
             for i in range(len(CrossoverList)):
-                print("Solution ",i,": ",CrossoverList[i])
-            print("\n")
+                SolutionList.append(CrossoverList[i])
+
 
         #makespan Vector for each index on encoding
         #Duas listas, uma com tempo de job e outra com tempo da máquina, toda vez que for pega o tempo do job adiciona tempo da maquina rodando, depois de adicioonar pega
@@ -243,7 +252,7 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
     st.write('Best solution found: ', min(solutionMachineTimeI, key=lambda x: x[-1])[-1])
 
 
-a = st.sidebar.number_input("Number of solutions", 1, 1000)
+a = st.sidebar.number_input("Population size", 1, 1000)
 b = st.sidebar.slider('Crossover Chance', 0.0, 1.0, 0.5)
 e = st.sidebar.slider('Mutation Chance', 0.0, 1.0, 0.5)
 d = st.sidebar.number_input("Number of Generations", 1, 1000)

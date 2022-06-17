@@ -10,7 +10,7 @@ from job import Job
 
 # Kacem 4 Jobs x 5 Machines
 #file = 'Encoding/datasets/test.fjs'
-file = 'Encoding/datasets/Kacem1_4x5.fjs'
+file = 'FJSSP-FRRMAB/Encoding/datasets/Kacem1_4x5.fjs'
 
 # Kacem 15 Jobs x 10 Machines
 #file = 'Encoding/datasets/Kacem4.fjs'
@@ -134,7 +134,7 @@ for i in range(SolutionNum):
     print("Solution #",i,": ",SolutionList[i])
 print("\n")
 
-generationNum = 10
+generationNum = 1
 for i in range(generationNum):
     crossoverChance = 0.8
     mutationChance = 0.6
@@ -177,6 +177,10 @@ for i in range(generationNum):
             for i in range(len(CrossoverList)):
                 print("Solution ",i,": ",CrossoverList[i])
             print("\n")
+
+        #inserting new solution in list
+        for i in range(len(CrossoverList)):
+            SolutionList.append(CrossoverList[i])
 
         #makespan Vector for each index on encoding
         #Duas listas, uma com tempo de job e outra com tempo da máquina, toda vez que for pega o tempo do job adiciona tempo da maquina rodando, depois de adicioonar pega
