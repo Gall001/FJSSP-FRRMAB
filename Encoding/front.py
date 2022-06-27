@@ -249,6 +249,7 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
                 solutionMachineTime[i].append(max(machines))
                 solutionMachineTimeI.append(solutionMachineTime[i])
             
+    st.write('Best solution sequence: ', min(solutionMachineTimeI, key=lambda x: x[-1]))
     st.write('Best solution found: ', min(solutionMachineTimeI, key=lambda x: x[-1])[-1])
 
 
