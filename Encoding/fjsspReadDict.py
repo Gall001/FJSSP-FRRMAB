@@ -10,7 +10,7 @@ from job import Job
 
 # Kacem 4 Jobs x 5 Machines
 #file = 'Encoding/datasets/test.fjs'
-file = 'FJSSP-FRRMAB/Encoding/datasets/Kacem1_4x5.fjs'
+file = 'Encoding/datasets/Kacem1_4x5.fjs'
 
 # Kacem 15 Jobs x 10 Machines
 #file = 'Encoding/datasets/Kacem4.fjs'
@@ -127,6 +127,7 @@ for i in range(len(solutionMachineTimeI)):
             jobs[jobAtual] += solutionMachineTimeI[i][solution][1] 
             machines[solutionMachineTimeI[i][solution][0]-1] = jobs[jobAtual]
     solutionMachineTimeI[i].append(max(machines))
+print('ALL SOLUTIONS MACHINE TIME I: ',solutionMachineTimeI)
 
 #print list os solutions
 print("Solution list:")

@@ -91,6 +91,9 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
     SolutionList = []
     for i in range(SolutionNum):
         Solution = []
+        Machine = []
+        Order = []
+        OperationOrder = 0
         for x in range(len(jobs_list)):
             for y in jobs_list[x]:
                 #choose option rendomly to append to a solution being made
@@ -98,8 +101,18 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
                 Grade = 1
                 for key in range(len(jobs_list[x][y])):
                     if OperationChosen[1] > jobs_list[x][y][int(key)-1][1]: Grade = Grade +1
-                Solution.append(Grade)
+                OperationOrder += 1
+                Machine.append(Grade)
+                Order.append(OperationOrder)
+        Solution.append(list(zip(Machine, Order)))
         SolutionList.append(Solution)
+        print('solution two vetors: ')
+        print(Solution)
+        print('solution one vetors: ')
+        print(Machine)
+    print('solution list: ')
+    print(SolutionList)
+    print('------------------------------')
 
     #calculating incial makespan
     timeMachineOrganized = []
@@ -116,8 +129,10 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
     #for each solution index number it search the number to add to solutionMachineTimeI
     for i in range(len(SolutionList)):
         timeMachineTemp = []
-        for x in range(len(SolutionList[i])):
-            timeMachineTemp.append(timeMachineOrganized[x][SolutionList[i][x] - 1])
+        order1 = []
+        for x in range(len(SolutionList[i][0])):
+            timeMachineTemp.append(timeMachineOrganized[x][SolutionList[i][0][x][0] - 1])
+            order1.append(SolutionList[i][0][x][1])
         solutionMachineTimeI.append(timeMachineTemp)
         
     for i in range(len(solutionMachineTimeI)):
@@ -140,7 +155,9 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
             else:
                 jobs[jobAtual] += solutionMachineTimeI[i][solution][1] 
                 machines[solutionMachineTimeI[i][solution][0]-1] = jobs[jobAtual]
+        solutionMachineTimeI[i].append(order1)
         solutionMachineTimeI[i].append(max(machines))
+    print('ALL SOLUTIONS MACHINE TIME I: ',solutionMachineTimeI)
 
     #print list os solutions
     print("Solution list:")
@@ -180,8 +197,10 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
                 for i in range(len(CrossoverList)):
                     for x in range(len(jobs_list)):
                         for y in jobs_list[x]:
-                            operatioNum = len(jobs_list[x][y])       
-                    CrossoverList[i][random.randint(0, len(CrossoverList[i])-1)] = random.randint(1, operatioNum)
+                            operatioNum = len(jobs_list[x][y])  
+                    tempList = list(CrossoverList[i][0][random.randint(0, len(CrossoverList[i])-1)])
+                    tempList[0] = random.randint(1, operatioNum)
+                    CrossoverList[i][0][random.randint(0, len(CrossoverList[i])-1)] = tempList
 
                 #Print new solutions after mutation
                 print("New solutions made with Mutation:")
@@ -214,8 +233,10 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
             #for each solution index number it search the number to add to solutionMachineTime
             for i in range(len(CrossoverList)):
                 timeMachineTemp = []
-                for x in range(len(CrossoverList[i])):
-                    timeMachineTemp.append(timeMachineOrganized[x][CrossoverList[i][x] - 1])
+                order2 = []
+                for x in range(len(CrossoverList[i][0])):
+                    timeMachineTemp.append(timeMachineOrganized[x][CrossoverList[i][0][x][0] - 1])
+                    order2.append(SolutionList[i][0][x][1])
                 solutionMachineTime.append(timeMachineTemp)
 
             # Print solution Machines and time after mutation
@@ -246,17 +267,19 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
                     else:
                         jobs[jobAtual] += solutionMachineTime[i][solution][1] 
                         machines[solutionMachineTime[i][solution][0]-1] = jobs[jobAtual]
+                solutionMachineTime[i].append(order2)
                 solutionMachineTime[i].append(max(machines))
+                print('solutionMachineTime[i]: ',solutionMachineTime[i])
                 solutionMachineTimeI.append(solutionMachineTime[i])
             
     st.write('Best solution sequence: ', min(solutionMachineTimeI, key=lambda x: x[-1]))
     st.write('Best solution found: ', min(solutionMachineTimeI, key=lambda x: x[-1])[-1])
 
 
-a = st.sidebar.number_input("Population size", 1, 1000)
+a = st.sidebar.number_input("Population size", 1, 100000)
 b = st.sidebar.slider('Crossover Chance', 0.0, 1.0, 0.5)
 e = st.sidebar.slider('Mutation Chance', 0.0, 1.0, 0.5)
-d = st.sidebar.number_input("Number of Generations", 1, 1000)
+d = st.sidebar.number_input("Number of Generations", 1, 100000)
 c = st.sidebar.selectbox(
     'Select dataset',
     ('FJSSP-FRRMAB/Encoding/datasets/test.fjs', 'FJSSP-FRRMAB/Encoding/datasets/Kacem1_4x5.fjs', 'FJSSP-FRRMAB/Encoding/datasets/Kacem4.fjs'))
