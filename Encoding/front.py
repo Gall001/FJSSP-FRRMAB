@@ -2,6 +2,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from mutation import simpleMutation
+from correction import correction
 #streamlit title
 st.title('Genetic Algorithm')
 
@@ -106,13 +108,10 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
                 Order.append(OperationOrder)
         Solution.append(list(zip(Machine, Order)))
         SolutionList.append(Solution)
-        print('solution two vetors: ')
-        print(Solution)
-        print('solution one vetors: ')
-        print(Machine)
-    print('solution list: ')
-    print(SolutionList)
-    print('------------------------------')
+        # print('solution two vetors: ')
+        # print(Solution)
+        # print('solution one vetors: ')
+        # print(Machine)
 
     #calculating incial makespan
     timeMachineOrganized = []
@@ -157,7 +156,7 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
                 machines[solutionMachineTimeI[i][solution][0]-1] = jobs[jobAtual]
         solutionMachineTimeI[i].append(order1)
         solutionMachineTimeI[i].append(max(machines))
-    print('ALL SOLUTIONS MACHINE TIME I: ',solutionMachineTimeI)
+    #print('ALL SOLUTIONS MACHINE TIME I: ',solutionMachineTimeI)
 
     #print list os solutions
     print("Solution list:")
@@ -173,8 +172,8 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
             validator = 0
             if(random.random() <= crossoverChance):
                 #getting two rendom solutions, cutting them in half and mixing them one with another
-                s1 = SolutionList[random.randint(0, int(float(SolutionNum))-1)]
-                s2 = SolutionList[random.randint(0, int(float(SolutionNum))-1)]
+                s1 = SolutionList[random.randint(0, int(float(SolutionNum))-1)][0]
+                s2 = SolutionList[random.randint(0, int(float(SolutionNum))-1)][0]
                 Half = round(len(s1)/2)
                 s1h1 = s1[:Half]
                 s1h2 = s1[Half:]
@@ -187,26 +186,34 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
                 validator +=1
 
                 #print new solutions made with crossover
-                print("New solutions made with crossover:")
-                for i in range(len(CrossoverList)):
-                    print("Solution ",i,": ",CrossoverList[i])
-                print("\n")
+                # print("New solutions made with crossover:")
+                # for i in range(len(CrossoverList)):
+                #     print("Solution ",i,": ",CrossoverList[i])
+                # print("\n")
 
             if(random.random() <= mutationChance and validator == 1):
-                #mutation
-                for i in range(len(CrossoverList)):
-                    for x in range(len(jobs_list)):
-                        for y in jobs_list[x]:
-                            operatioNum = len(jobs_list[x][y])  
-                    tempList = list(CrossoverList[i][0][random.randint(0, len(CrossoverList[i])-1)])
-                    tempList[0] = random.randint(1, operatioNum)
-                    CrossoverList[i][0][random.randint(0, len(CrossoverList[i])-1)] = tempList
 
-                #Print new solutions after mutation
-                print("New solutions made with Mutation:")
-                for i in range(len(CrossoverList)):
-                    print("Solution ",i,": ",CrossoverList[i])
-                print("\n")
+                #mutation
+                simpleMutation(CrossoverList, jobs_list)
+
+            #solution corrector
+            for i in range(len(CrossoverList)):
+                minValue = 1
+                maxValue = 0
+                print('solution #',i)
+                for job in range(len(jobs_list)):
+                    maxValue += len(jobs_list[job])
+                    print("min value = ",minValue," max value = ",maxValue)
+                    correction(minValue,maxValue,CrossoverList[i])
+                    minValue += len(jobs_list[job])
+                    
+                    
+                    
+            #Print new solutions after mutation
+            print("New solutions made with Mutation/crossover:")
+            for i in range(len(CrossoverList)):
+                print("Solution ",i,": ",CrossoverList[i])
+            print("\n")
 
             #inserting new solution in list
             for i in range(len(CrossoverList)):
@@ -234,16 +241,16 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
             for i in range(len(CrossoverList)):
                 timeMachineTemp = []
                 order2 = []
-                for x in range(len(CrossoverList[i][0])):
-                    timeMachineTemp.append(timeMachineOrganized[x][CrossoverList[i][0][x][0] - 1])
+                for x in range(len(CrossoverList[i])):
+                    timeMachineTemp.append(timeMachineOrganized[x][CrossoverList[i][x][0] - 1])
                     order2.append(SolutionList[i][0][x][1])
                 solutionMachineTime.append(timeMachineTemp)
 
             # Print solution Machines and time after mutation
-            print("solution Machines and time after Mutation:")
-            for i in range(len(solutionMachineTime)):
-                print("Solution ",i,": ",solutionMachineTime[i])
-            print("\n")
+            # print("solution Machines and time after Mutation:")
+            # for i in range(len(solutionMachineTime)):
+            #     print("Solution ",i,": ",solutionMachineTime[i])
+            # print("\n")
 
 
             # Caluclating Makespan
@@ -269,8 +276,12 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
                         machines[solutionMachineTime[i][solution][0]-1] = jobs[jobAtual]
                 solutionMachineTime[i].append(order2)
                 solutionMachineTime[i].append(max(machines))
-                print('solutionMachineTime[i]: ',solutionMachineTime[i])
                 solutionMachineTimeI.append(solutionMachineTime[i])
+
+    print("Final Solution list:")
+    for i in range(len(SolutionList)):
+        print("Solution #",i,": ",SolutionList[i])
+    print("\n")
             
     st.write('Best solution sequence: ', min(solutionMachineTimeI, key=lambda x: x[-1]))
     st.write('Best solution found: ', min(solutionMachineTimeI, key=lambda x: x[-1])[-1])
