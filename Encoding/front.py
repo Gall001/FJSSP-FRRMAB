@@ -2,7 +2,9 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from mutation import simpleMutation
+from mutation import swapMutation
+from mutation import inverseMutation
+from mutation import insertMutation
 from correction import correction
 #streamlit title
 st.title('Genetic Algorithm')
@@ -194,7 +196,9 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
             if(random.random() <= mutationChance and validator == 1):
 
                 #mutation
-                simpleMutation(CrossoverList, jobs_list)
+                CrossoverList = swapMutation(CrossoverList)
+                CrossoverList = inverseMutation(CrossoverList)
+                CrossoverList = insertMutation(CrossoverList)
 
             #solution corrector
             for i in range(len(CrossoverList)):
