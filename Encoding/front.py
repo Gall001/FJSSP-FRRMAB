@@ -2,6 +2,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from crossover import OX
+from crossover import twoPoint
 from mutation import swapMutation
 from mutation import inverseMutation
 from mutation import insertMutation
@@ -173,32 +175,20 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
             CrossoverList = []
             validator = 0
             if(random.random() <= crossoverChance):
-                #getting two rendom solutions, cutting them in half and mixing them one with another
-                s1 = SolutionList[random.randint(0, int(float(SolutionNum))-1)][0]
-                s2 = SolutionList[random.randint(0, int(float(SolutionNum))-1)][0]
-                Half = round(len(s1)/2)
-                s1h1 = s1[:Half]
-                s1h2 = s1[Half:]
-                s2h1 = s2[:Half]
-                s2h2 = s2[Half:]
-                s2 = s1h1 + s2h2
-                s1 = s2h1 + s1h2
-                CrossoverList.append(s2)
-                CrossoverList.append(s1)
+
+                #crossover
+                twoPoint(CrossoverList,SolutionList,SolutionNum)
+                OX(CrossoverList,SolutionList,SolutionNum)
+
                 validator +=1
 
-                #print new solutions made with crossover
-                # print("New solutions made with crossover:")
-                # for i in range(len(CrossoverList)):
-                #     print("Solution ",i,": ",CrossoverList[i])
-                # print("\n")
 
             if(random.random() <= mutationChance and validator == 1):
 
                 #mutation
-                CrossoverList = swapMutation(CrossoverList)
-                CrossoverList = inverseMutation(CrossoverList)
-                CrossoverList = insertMutation(CrossoverList)
+                swapMutation(CrossoverList)
+                inverseMutation(CrossoverList)
+                insertMutation(CrossoverList)
 
             #solution corrector
             for i in range(len(CrossoverList)):

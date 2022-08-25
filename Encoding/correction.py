@@ -20,15 +20,15 @@ def correction(min, max, list):
     """
     atual = min
     for key in list:
-        print(key[1])
+        #print(key[1])
         #ordencao sentinela
         if key[1] >= atual and key[1] <= max and key[1] != atual:
             list.sort(key=lambda tup: tup[1])
-            print('order needed: ', list)
+            #print('order needed: ', list)
             return list
         elif key[1] == atual and atual<max:
             atual = atual+1
-    print('order not needed: ', list)
+    #print('order not needed: ', list)
     return list
 
 #correction(min,max,list)

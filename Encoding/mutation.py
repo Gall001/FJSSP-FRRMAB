@@ -43,6 +43,7 @@ def insertMutation(CrossoverList):
                 newValue =list(CrossoverList[i][x])
                 newValue[1] = newValue[1]+1
                 CrossoverList[i][x] = newValue
+    return CrossoverList
 
 def inverseMutation(CrossoverList):
     for i in range(len(CrossoverList)):
