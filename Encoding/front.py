@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+from crossover import PMX
 from crossover import OX
 from crossover import twoPoint
 from mutation import swapMutation
@@ -112,10 +113,6 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
                 Order.append(OperationOrder)
         Solution.append(list(zip(Machine, Order)))
         SolutionList.append(Solution)
-        # print('solution two vetors: ')
-        # print(Solution)
-        # print('solution one vetors: ')
-        # print(Machine)
 
     #calculating incial makespan
     timeMachineOrganized = []
@@ -173,34 +170,38 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
         #crossover
         for x in range(SolutionNum):
             CrossoverList = []
+            s1 = SolutionList[random.randint(0, int(float(SolutionNum))-1)][0]
+            s2 = SolutionList[random.randint(0, int(float(SolutionNum))-1)][0]
+            CrossoverList.append(s1)
+            CrossoverList.append(s2)
             validator = 0
             if(random.random() <= crossoverChance):
 
                 #crossover
-                twoPoint(CrossoverList,SolutionList,SolutionNum)
-                OX(CrossoverList,SolutionList,SolutionNum)
+                twoPoint(CrossoverList,s1,s2)
+                OX(CrossoverList,s1,s2)
+                PMX(CrossoverList,s1,s2)
 
-                validator +=1
+                validator = 1
 
 
-            if(random.random() <= mutationChance and validator == 1):
+            if(random.random() <= mutationChance):
 
                 #mutation
                 swapMutation(CrossoverList)
                 inverseMutation(CrossoverList)
                 insertMutation(CrossoverList)
 
+                validator = 1
+
             #solution corrector
             for i in range(len(CrossoverList)):
                 minValue = 1
                 maxValue = 0
-                print('solution #',i)
                 for job in range(len(jobs_list)):
                     maxValue += len(jobs_list[job])
-                    print("min value = ",minValue," max value = ",maxValue)
-                    correction(minValue,maxValue,CrossoverList[i])
+                    CrossoverList[i] = correction(minValue,maxValue,CrossoverList[i])
                     minValue += len(jobs_list[job])
-                    
                     
                     
             #Print new solutions after mutation
@@ -239,12 +240,6 @@ def GA(solutionNumber,crossoverChance,mutationChance, dataset, generationNumber)
                     timeMachineTemp.append(timeMachineOrganized[x][CrossoverList[i][x][0] - 1])
                     order2.append(SolutionList[i][0][x][1])
                 solutionMachineTime.append(timeMachineTemp)
-
-            # Print solution Machines and time after mutation
-            # print("solution Machines and time after Mutation:")
-            # for i in range(len(solutionMachineTime)):
-            #     print("Solution ",i,": ",solutionMachineTime[i])
-            # print("\n")
 
 
             # Caluclating Makespan

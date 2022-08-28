@@ -1,8 +1,6 @@
 import random
 
-def twoPoint(CrossoverList,SolutionList,SolutionNum):
-    s1 = SolutionList[random.randint(0, int(float(SolutionNum))-1)][0]
-    s2 = SolutionList[random.randint(0, int(float(SolutionNum))-1)][0]
+def twoPoint(CrossoverList,s1,s2):
 
     firstThird = int(round(len(s1)/3))
     secondThird = int(round(len(s1)/3) * 2)
@@ -23,9 +21,7 @@ def twoPoint(CrossoverList,SolutionList,SolutionNum):
 
     return CrossoverList
 
-def OX(CrossoverList,SolutionList,SolutionNum):
-    s1 = SolutionList[random.randint(0, int(float(SolutionNum))-1)][0]
-    s2 = SolutionList[random.randint(0, int(float(SolutionNum))-1)][0]
+def OX(CrossoverList,s1,s2):
 
     core = []
     core.append(random.randint(1, len(s1)-1))
@@ -52,3 +48,32 @@ def OX(CrossoverList,SolutionList,SolutionNum):
         counter = counter + 1
 
     CrossoverList.append(newSolution)
+    return CrossoverList
+
+def PMX(CrossoverList,s1,s2):
+    core = []
+    core.append(random.randint(1, len(s1)-1))
+    core.append(random.randint(1, len(s1)-1))
+    core.sort()
+
+    size = min(len(s1), len(s2))
+    p1, p2 = [0] * size, [0] * size
+
+    for i in range(size-1):
+        print('s1[i][1]: ',s1[i][1])
+        p1[s1[i][1]] = i
+        p2[s2[i][1]] = i
+
+    for i in range(core[0], core[1]):
+        temp1 = s1[i]
+        temp2 = s2[i]
+
+        s1[i], s1[p1[temp2[1]]] = temp2, temp1
+        s2[i], s2[p2[temp1[1]]] = temp1, temp2
+
+        p1[temp1[1]], p1[temp2[1]] = p1[temp2[1]], p1[temp1[1]]
+        p2[temp1[1]], p2[temp2[1]] = p2[temp2[1]], p2[temp1[1]]
+    CrossoverList.append(s1)
+    CrossoverList.append(s2)
+
+    return CrossoverList
