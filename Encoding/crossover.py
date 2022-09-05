@@ -60,7 +60,6 @@ def PMX(CrossoverList,s1,s2):
     p1, p2 = [0] * size, [0] * size
 
     for i in range(size-1):
-        print('s1[i][1]: ',s1[i][1])
         p1[s1[i][1]] = i
         p2[s2[i][1]] = i
 
