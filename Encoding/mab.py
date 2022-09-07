@@ -6,14 +6,13 @@ from front import GA
 st.title('Genetic Algorithm')
 
 class Bandit:
-    def __init__(self, k=3, exp_rate=0.3, lr=0.1, ucb=False, seed=None, c=2, a=100,b=0.7,c1='FJSSP-FRRMAB/Encoding/datasets/Kacem1_4x5.fjs',d=10,e=0.4):
+    def __init__(self, k=9, exp_rate=0.3, lr=0.1, ucb=False, seed=None, c=2, a=100,b=0.7,c1='FJSSP-FRRMAB/Encoding/datasets/Kacem1_4x5.fjs',e=0.4):
         self.k = k #PMX, OX and two vetores = 3
         self.actions = range(self.k) #[0,1,2]
         self.exp_rate = exp_rate
         self.lr = lr
         self.total_reward = 0
         self.avg_reward = []
-        self.generation = d
         self.crossovr = b
         self.mutation = e
         
@@ -52,7 +51,7 @@ class Bandit:
         self.times += 1
         self.action_times[action] += 1
         # take action and update value estimates
-        reward = self.ga.methods(self.generation,self.crossovr,self.mutation, action) + self.TrueValue[action]  # add randomness to reward
+        reward = self.ga.methods(self.crossovr,self.mutation, action) + self.TrueValue[action]  # add randomness to reward
         # using incremental method to propagate
         self.values[action] += self.lr * (reward - self.values[action])  # look like fixed lr converges better
         
@@ -83,8 +82,7 @@ h = st.sidebar.selectbox(
 c1 = st.sidebar.selectbox(
     'Select dataset',
     ('FJSSP-FRRMAB/Encoding/datasets/test.fjs', 'FJSSP-FRRMAB/Encoding/datasets/Kacem1_4x5.fjs', 'FJSSP-FRRMAB/Encoding/datasets/Kacem4.fjs'))
-i = st.sidebar.number_input("Iterations of MAB", 1, 100000)
 
 if st.sidebar.button("Run MAB"):
-    bdt = Bandit(exp_rate=f, lr=g, ucb=h, a=a, b=b, c1=c1, d=d, e=e)
-    bdt.play(i)
+    bdt = Bandit(exp_rate=f, lr=g, ucb=h, a=a, b=b, c1=c1, e=e)
+    bdt.play(d)
