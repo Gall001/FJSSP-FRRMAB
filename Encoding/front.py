@@ -1,4 +1,5 @@
 # streamlit Imports
+from xml.dom.minidom import TypeInfo
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -272,13 +273,16 @@ class GA:
             solutionMachineTime = []
 
             # for each solution index number it search the number to add to solutionMachineTime
-            for i in range(len(CrossoverList)):
+            for i in range(self.SolutionNum,len(self.SolutionList)):
                 timeMachineTemp = []
                 order2 = []
-                for x in range(len(CrossoverList[i])):
-                    timeMachineTemp.append(
-                        timeMachineOrganized[x][CrossoverList[i][x][0] - 1])
-                    order2.append(self.SolutionList[i][0][x][1])
+                for x in range(len(self.SolutionList[i])):
+                    if(isinstance(self.SolutionList[i][x][0], int)):
+                        timeMachineTemp.append(timeMachineOrganized[x][self.SolutionList[i][x][0] - 1])
+                        order2.append(self.SolutionList[i][x][1])
+                    else:
+                        timeMachineTemp.append(timeMachineOrganized[x][self.SolutionList[i][0][x][0] - 1])
+                        order2.append(self.SolutionList[i][0][x][1])
                 solutionMachineTime.append(timeMachineTemp)
 
             # Caluclating Makespan
@@ -307,9 +311,12 @@ class GA:
                 self.solutionMachineTimeI.append(solutionMachineTime[i])
 
         # print("Final Solution list:")
-        # for i in range(len(self.SolutionList)):
-        #     print("Solution #",i,": ",self.SolutionList[i])
+        # for i in range(len(self.solutionMachineTimeI)):
+        #     print("Solution #",i,": ",self.solutionMachineTimeI[i])
         # print("\n")
+        elitismo = min(self.solutionMachineTimeI, key=lambda x: x[-1])
+        self.solutionMachineTimeI = []
+        self.solutionMachineTimeI.append(elitismo)
         return min(self.solutionMachineTimeI, key=lambda x: x[-1])[-1]
 
     def showResult(self):
