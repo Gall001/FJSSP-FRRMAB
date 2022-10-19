@@ -3,15 +3,16 @@ from xml.dom.minidom import TypeInfo
 import streamlit as st
 import pandas as pd
 import numpy as np
-from crossover import PMX
-from crossover import OX
-from crossover import twoPoint
-from mutation import swapMutation
-from mutation import inverseMutation
-from mutation import insertMutation
-from correction import correction
+import os
+from algorithms.crossover import PMX
+from algorithms.crossover import OX
+from algorithms.crossover import twoPoint
+from algorithms.mutation import swapMutation
+from algorithms.mutation import inverseMutation
+from algorithms.mutation import insertMutation
+from algorithms.correction import correction
 #from mab import Bandit
-from job import Job
+from algorithms.job import Job
 from configparser import MissingSectionHeaderError
 import random
 import re                           # Regular Expressions - to read dataset and parse
